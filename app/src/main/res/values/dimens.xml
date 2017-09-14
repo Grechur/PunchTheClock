@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--单行边距-->
+    <dimen name="list_item_padding">14dp</dimen>
+    <dimen name="margin5">5dp</dimen>
+    <dimen name="dimen20">20dp</dimen>
+
+    <dimen name="text_waybill_detail_14">14sp</dimen>
+    <dimen name="text_waybill_detail_16">16sp</dimen>
+    <dimen name="text_waybill_detail_20">20sp</dimen>
+    <dimen name="text_waybill_detail_26">26sp</dimen>
+</resources>

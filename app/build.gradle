@@ -165,48 +165,48 @@ android {
     //修改生成的apk名字
     applicationVariants.all { variant ->
         variant.outputs.all {
-//            def newName
-//            def timeNow
-//            def oldFile = output.outputFile
-//            def outDirectory = oldFile.parent
-//
-//            if ("true".equals(IS_JENKINS)) {
-//                timeNow = JENKINS_TIME
-//                outDirectory = 'D:/apk'
-//                newName = 'yj-android-v' +
-//                        APP_VERSION + '-' + variant.productFlavors[0].name + timeNow + '-' + variant.buildType.name + '.apk'
-//            } else {
-//                timeNow = getDate()
-//                if (variant.buildType.name.equals('debug')) {
-//                    newName = "yj-android-v${APP_VERSION}-debug.apk"
-//                } else {
-//                    newName = 'yj-android-v' +
-//                            APP_VERSION + '-' + variant.productFlavors[0].name + timeNow + '-' + variant.buildType.name + '.apk'
-//                }
-//            }
-//
-//            output.outputFile = new File(outDirectory, newName)
-            //新名字
             def newName
-            //时间戳
             def timeNow
-            //输出文件夹
-            def outDirectory
-            //是否为Jenkins打包，输出路径不同
+
+            def outDirectory = 'apk'
+
             if ("true".equals(IS_JENKINS)) {
-                //BUILD_PATH为服务器输出路径
-                timeNow = BUILD_TIME
-                outDirectory = BUILD_PATH_JENKINS
-                //JKApp-v1.0.1-xiaomi-release.apk
-                newName = APPNAME+"-v"+APP_VERSION + '-' + variant.productFlavors[0].name + '-' + variant.buildType.name + '.apk'
+                timeNow = JENKINS_TIME
+                outDirectory = 'D:/apk'
+                newName = 'yj-android-v' +
+                        APP_VERSION + '-' + variant.productFlavors[0].name + timeNow + '-' + variant.buildType.name + '.apk'
             } else {
-                //本机打包输出在本机路径
                 timeNow = getDate()
-                outDirectory = BUILD_PATH_LOCAL
-                newName = APPNAME+"-v"+APP_VERSION + '-' + variant.productFlavors[0].name + '-' + variant.buildType.name + '.apk'
+                if (variant.buildType.name.equals('debug')) {
+                    newName = "yj-android-v${APP_VERSION}-debug.apk"
+                } else {
+                    newName = 'yj-android-v' +
+                            APP_VERSION + '-' + variant.productFlavors[0].name + timeNow + '-' + variant.buildType.name + '.apk'
+                }
             }
-            def file = new File(outDirectory+"/"+timeNow, newName)
-            outputFileName = file
+
+            outputFileName = new File(outDirectory, newName)
+//            //新名字
+//            def newName
+//            //时间戳
+//            def timeNow
+//            //输出文件夹
+//            def outDirectory
+//            //是否为Jenkins打包，输出路径不同
+//            if ("true".equals(IS_JENKINS)) {
+//                //BUILD_PATH为服务器输出路径
+//                timeNow = BUILD_TIME
+//                outDirectory = BUILD_PATH_JENKINS
+//                //JKApp-v1.0.1-xiaomi-release.apk
+//                newName = APPNAME+"-v"+APP_VERSION + '-' + variant.productFlavors[0].name + '-' + variant.buildType.name + '.apk'
+//            } else {
+//                //本机打包输出在本机路径
+//                timeNow = getDate()
+//                outDirectory = BUILD_PATH_LOCAL
+//                newName = APPNAME+"-v"+APP_VERSION + '-' + variant.productFlavors[0].name + '-' + variant.buildType.name + '.apk'
+//            }
+//            def file = new File(outDirectory+"/"+timeNow, newName)
+//            outputFileName = file
 
 
         }

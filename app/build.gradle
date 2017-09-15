@@ -1,80 +1,26 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
+//获取时间戳
 def getDate() {
     def date = new Date()
     def formattedDate = date.format('yyyyMMddHHmm')
     return formattedDate
 }
-def verCode = 1
 android {
-    //渠道Flavors
-    productFlavors {
-        xiaomi {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xiaomi"]
-        }
-        wandoujia {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "wandoujia"]
-        }
-    }
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
-    signingConfigs {
-        release {
-            keyAlias 'punch'
-            keyPassword 'zz124578'
-            storeFile file('key_store.jks')
-            storePassword 'zz124578'
-        }
-        debug {
-            keyAlias 'punch'
-            keyPassword 'zz124578'
-            storeFile file('key_store.jks')
-            storePassword 'zz124578'
-        }
-    }
+    buildToolsVersion "25.0.3"
     defaultConfig {
         applicationId "com.clock.zc.punchtheclock"
-        minSdkVersion 16
+        minSdkVersion 15
         targetSdkVersion 25
-        versionCode verCode
+        versionCode 1
         versionName "1.0"
-        versionName APP_VERSION
-        flavorDimensions "versionCode"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro' signingConfig signingConfigs.release
-        }
-        debug {
-            signingConfig signingConfigs.release
-        }
-    }
-    //修改生成的apk名字及输出文件夹
-    applicationVariants.all { variant ->
-        variant.outputs.all {
-            //新名字
-            def newName
-            //时间戳
-            def timeNow
-            //输出文件夹
-            def outDirectory
-            //是否为Jenkins打包，输出路径不同
-            if ("true".equals(IS_JENKINS)) {
-                //BUILD_PATH为服务器输出路径
-                timeNow = BUILD_TIME
-                outDirectory = BUILD_PATH_JENKINS
-                //JKApp-v1.0.1-xiaomi-release.apk
-                newName = APPNAME + "-v" + APP_VERSION + '-' + variant.productFlavors[0].name + timeNow + '-' + variant.buildType.name + '.apk'
-            } else {
-                //本机打包输出在本机路径
-                timeNow = getDate()
-                outDirectory = BUILD_PATH_LOCAL
-                newName = APPNAME + "-v" + APP_VERSION + '-' + variant.productFlavors[0].name + timeNow + '-' + variant.buildType.name + '.apk'
-            }
-            def file = new File(outDirectory, newName)
-            outputFileName = file
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     greendao {
@@ -87,35 +33,33 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+    //修改生成的apk名字
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            def newName
+            def timeNow
+
+            def outDirectory = 'apk'
+
+            if ("true".equals(IS_JENKINS)) {
+                timeNow = JENKINS_TIME
+                outDirectory = 'D:/apk'
+                newName = 'yj-android-v' +
+                        APP_VERSION + '-'  + timeNow + '-' + variant.buildType.name + '.apk'//+ variant.productFlavors[0].name
+            } else {
+                timeNow = getDate()
+                if (variant.buildType.name.equals('debug')) {
+                    newName = "yj-android-v${APP_VERSION}-debug.apk"
+                } else {
+                    newName = 'yj-android-v' +
+                            APP_VERSION + '-'  + timeNow + '-' + variant.buildType.name + '.apk'//+ variant.productFlavors[0].name
+                }
+            }
+
+            outputFileName = new File(outDirectory, newName)
+        }
+    }
 }
-//android {
-//    compileSdkVersion 25
-//    buildToolsVersion "25.0.3"
-//    defaultConfig {
-//        applicationId "com.clock.zc.punchtheclock"
-//        minSdkVersion 15
-//        targetSdkVersion 25
-//        versionCode 1
-//        versionName "1.0"
-//        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-//    }
-//    buildTypes {
-//        release {
-//            minifyEnabled false
-//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//        }
-//    }
-//    greendao {
-//        schemaVersion 2
-//        targetGenDir 'src/main/java'
-//    }
-//    sourceSets {
-//        main {
-//            // 设置Jni so文件路径
-//            jniLibs.srcDirs = ['libs']
-//        }
-//    }
-//}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

@@ -9,6 +9,23 @@ def getDate() {
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
+    //签名
+
+    signingConfigs {
+
+        myConfig {
+
+            storeFile file("key_store.jks")
+
+            storePassword "zz123"
+
+            keyAlias "punch"
+
+            keyPassword "zz123"
+
+        }
+
+    }
     defaultConfig {
         applicationId "com.clock.zc.punchtheclock"
         minSdkVersion 15

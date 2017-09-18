@@ -17,11 +17,11 @@ android {
 
             storeFile file("key_store.jks")
 
-            storePassword "zz123"
+            storePassword "zz124578"
 
             keyAlias "punch"
 
-            keyPassword "zz123"
+            keyPassword "zz124578"
 
         }
 

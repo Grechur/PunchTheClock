@@ -15,9 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.clock.zc.punchtheclock.R;
-import com.clock.zc.punchtheclock.bean.ClockHistory;
+//import com.clock.zc.punchtheclock.bean.ClockHistory;
 import com.clock.zc.punchtheclock.util.AccountMgr;
-import com.clock.zc.punchtheclock.util.DBManager;
+//import com.clock.zc.punchtheclock.util.DBManager;
 import com.clock.zc.punchtheclock.util.DialogUtil;
 
 import org.xutils.x;
@@ -30,7 +30,7 @@ public class BaseActivity extends AppCompatActivity {
     protected Context context;
     protected AccountMgr amr;
     protected DialogUtil dialogUtil;
-    protected DBManager dbManager;
+//    protected DBManager dbManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,11 +39,11 @@ public class BaseActivity extends AppCompatActivity {
         application = (ClockApplication) getApplication();
         amr = new AccountMgr(context);
         dialogUtil = new DialogUtil();
-        dbManager = application.getDbManager();
+//        dbManager = application.getDbManager();
     }
-    protected void insertDB(ClockHistory clockHistory){
-        dbManager.insertClockHistory(clockHistory);
-    }
+//    protected void insertDB(ClockHistory clockHistory){
+//        dbManager.insertClockHistory(clockHistory);
+//    }
     protected int dip2px(Context context,float dipValue)
     {
         Resources r = context.getResources();

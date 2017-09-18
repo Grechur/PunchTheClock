@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.clock.zc.punchtheclock.R;
 import com.clock.zc.punchtheclock.base.BaseActivity;
-import com.clock.zc.punchtheclock.bean.ClockHistory;
+//import com.clock.zc.punchtheclock.bean.ClockHistory;
 import com.clock.zc.punchtheclock.util.Content;
 import com.clock.zc.punchtheclock.util.TimeUtil;
 import com.clock.zc.punchtheclock.util.UniqueKey;
@@ -104,10 +104,10 @@ public class MainActivity extends BaseActivity {
         if (amr.getInt(UniqueKey.calarm_hour, -1) != -1) {
             if (hour < amr.getInt(UniqueKey.calarm_hour, -1) && (wifiName.equals(wifi) || wifiName.equals(wifi1))) {
                 amr.putString(UniqueKey.calarm_math, TimeUtil.getData());
-                ClockHistory clockHistory = new ClockHistory();
-                clockHistory.setTime(TimeUtil.getData());
-                clockHistory.setStatue(1);
-                insertDB(clockHistory);
+//                ClockHistory clockHistory = new ClockHistory();
+//                clockHistory.setTime(TimeUtil.getData());
+//                clockHistory.setStatue(1);
+//                insertDB(clockHistory);
                 time.setText("今日打卡时间:" + TimeUtil.getDataHour());
             } else if (hour == amr.getInt(UniqueKey.calarm_hour, -1)) {
                 if (minute < amr.getInt(UniqueKey.calarm_minute, -1)) {
@@ -152,11 +152,11 @@ public class MainActivity extends BaseActivity {
                         int minute = sList.get(4);
                         if (hour < amr.getInt(UniqueKey.calarm_hour, -1)) {
                             amr.putString(UniqueKey.calarm_math, TimeUtil.getData());
-                            ClockHistory clockHistory = new ClockHistory();
-                            clockHistory.setTime(TimeUtil.getData());
-                            clockHistory.setStatue(1);
-                            ClockHistory clockHistory1 = new ClockHistory();
-                            insertDB(clockHistory);
+//                            ClockHistory clockHistory = new ClockHistory();
+//                            clockHistory.setTime(TimeUtil.getData());
+//                            clockHistory.setStatue(1);
+//                            ClockHistory clockHistory1 = new ClockHistory();
+//                            insertDB(clockHistory);
                             time.setText("今日打卡时间:" + TimeUtil.getDataHour());
                         } else if (hour == amr.getInt(UniqueKey.calarm_hour, -1)) {
                             if (minute < amr.getInt(UniqueKey.calarm_minute, -1)) {
@@ -219,10 +219,10 @@ public class MainActivity extends BaseActivity {
                     int minute = sList.get(4);
                     if (hour < amr.getInt(UniqueKey.calarm_hour, -1)) {
                         amr.putString(UniqueKey.calarm_math, TimeUtil.getData());
-                        ClockHistory clockHistory = new ClockHistory();
-                        clockHistory.setTime(TimeUtil.getData());
-                        clockHistory.setStatue(1);
-                        insertDB(clockHistory);
+//                        ClockHistory clockHistory = new ClockHistory();
+//                        clockHistory.setTime(TimeUtil.getData());
+//                        clockHistory.setStatue(1);
+//                        insertDB(clockHistory);
                         time.setText("今日打卡时间:" + TimeUtil.getDataHour());
                     } else if (hour == amr.getInt(UniqueKey.calarm_hour, -1)) {
                         if (minute < amr.getInt(UniqueKey.calarm_minute, -1)) {

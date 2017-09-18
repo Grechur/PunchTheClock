@@ -80,10 +80,14 @@ android {
             outputFileName = new File(outDirectory, newName)
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -91,6 +95,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'org.xutils:xutils:3.5.0'
-//    compile 'org.greenrobot:greendao:3.1.0'
-//    compile 'org.greenrobot:greendao-generator:3.1.0'
+    //    compile 'org.greenrobot:greendao:3.1.0'
+    //    compile 'org.greenrobot:greendao-generator:3.1.0'
 }

@@ -34,6 +34,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.myConfig
+        flavorDimensions "versionCode"
     }
 	lintOptions {//设置编译的lint开关，程序在buid的时候，会执行lint检查，有任何的错误或者警告提示，都会终止构建  
         abortOnError false  
@@ -42,6 +43,18 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    //渠道Flavors，我这里写了一些常用的
+    productFlavors {
+        commonsoon {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "commonsoon"]
+        }
+        zhushou360 {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "zhushou360"]
+        }
+        yingyongbao {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "yingyongbao"]
         }
     }
 //    greendao {
@@ -64,8 +77,7 @@ android {
 
             if ("true".equals(IS_JENKINS)) {
                 timeNow = JENKINS_TIME
-                outDirectory = 'D:/apk'
-                newName = 'yj-android-v' +
+                newName = 'jenkins-yj-android-v' +
                         APP_VERSION + '-'  + timeNow + '-' + variant.buildType.name + '.apk'//+ variant.productFlavors[0].name
             } else {
                 timeNow = getDate()

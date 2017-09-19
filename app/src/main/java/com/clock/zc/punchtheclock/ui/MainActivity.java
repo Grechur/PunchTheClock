@@ -60,7 +60,6 @@ public class MainActivity extends BaseActivity {
         tv_date.setText(TimeUtil.StringData());
         lastDate = amr.getVal(UniqueKey.calarm_math);
 
-
         oldTime = TimeUtil.getYMD(lastDate);
         newTime = TimeUtil.getYMD(TimeUtil.getData());
         if(!TextUtils.isEmpty(lastDate)&&oldTime.equals(newTime)){

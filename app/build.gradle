@@ -43,6 +43,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.myConfig
+        }
+        debug {
+            signingConfig signingConfigs.myConfig
         }
     }
     //渠道Flavors，我这里写了一些常用的
@@ -77,8 +81,7 @@ android {
 
             if ("true".equals(IS_JENKINS)) {
                 timeNow = JENKINS_TIME
-                newName = 'jenkins-yj-android-v' +
-                        APP_VERSION + '-'  + timeNow + '-' + variant.buildType.name + '.apk'//+ variant.productFlavors[0].name
+                newName = APK_NAME+timeNow + '.apk'//+ variant.productFlavors[0].name
             } else {
                 timeNow = getDate()
                 if (variant.buildType.name.equals('debug')) {

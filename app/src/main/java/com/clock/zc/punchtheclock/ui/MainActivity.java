@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.clock.zc.punchtheclock.R;
 import com.clock.zc.punchtheclock.base.BaseActivity;
 //import com.clock.zc.punchtheclock.bean.ClockHistory;
+import com.clock.zc.punchtheclock.bean.ClockBean;
 import com.clock.zc.punchtheclock.util.Content;
 import com.clock.zc.punchtheclock.util.TimeUtil;
 import com.clock.zc.punchtheclock.util.UniqueKey;
@@ -71,6 +72,8 @@ public class MainActivity extends BaseActivity {
             to_sensor.setText(sType+"打卡");
             if(sType.equals(Content.WIFI_TYPE)&&!oldTime.equals(newTime)){
                 clockByWifi();
+            }else{
+                toast("您已经打卡了");
             }
         }else{
             to_sensor.setVisibility(View.GONE);
@@ -107,6 +110,10 @@ public class MainActivity extends BaseActivity {
 //                clockHistory.setTime(TimeUtil.getData());
 //                clockHistory.setStatue(1);
 //                insertDB(clockHistory);
+                ClockBean clockBean = new ClockBean();
+                clockBean.setTime(TimeUtil.getData());
+                clockBean.setStatue(1);
+                liteOrm.insert(clockBean);
                 time.setText("今日打卡时间:" + TimeUtil.getDataHour());
             } else if (hour == amr.getInt(UniqueKey.calarm_hour, -1)) {
                 if (minute < amr.getInt(UniqueKey.calarm_minute, -1)) {
@@ -115,7 +122,6 @@ public class MainActivity extends BaseActivity {
                     toastCenter("很抱歉，你迟到了，明天加油哦");
                 }
             } else {
-
                 toastCenter("很抱歉，你迟到了，明天加油哦");
             }
         } else {
@@ -156,6 +162,10 @@ public class MainActivity extends BaseActivity {
 //                            clockHistory.setStatue(1);
 //                            ClockHistory clockHistory1 = new ClockHistory();
 //                            insertDB(clockHistory);
+                            ClockBean clockBean = new ClockBean();
+                            clockBean.setTime(TimeUtil.getData());
+                            clockBean.setStatue(1);
+                            liteOrm.insert(clockBean);
                             time.setText("今日打卡时间:" + TimeUtil.getDataHour());
                         } else if (hour == amr.getInt(UniqueKey.calarm_hour, -1)) {
                             if (minute < amr.getInt(UniqueKey.calarm_minute, -1)) {
@@ -222,6 +232,10 @@ public class MainActivity extends BaseActivity {
 //                        clockHistory.setTime(TimeUtil.getData());
 //                        clockHistory.setStatue(1);
 //                        insertDB(clockHistory);
+                        ClockBean clockBean = new ClockBean();
+                        clockBean.setTime(TimeUtil.getData());
+                        clockBean.setStatue(1);
+                        liteOrm.insert(clockBean);
                         time.setText("今日打卡时间:" + TimeUtil.getDataHour());
                     } else if (hour == amr.getInt(UniqueKey.calarm_hour, -1)) {
                         if (minute < amr.getInt(UniqueKey.calarm_minute, -1)) {

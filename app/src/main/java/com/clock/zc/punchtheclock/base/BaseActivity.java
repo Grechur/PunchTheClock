@@ -19,6 +19,7 @@ import com.clock.zc.punchtheclock.R;
 import com.clock.zc.punchtheclock.util.AccountMgr;
 //import com.clock.zc.punchtheclock.util.DBManager;
 import com.clock.zc.punchtheclock.util.DialogUtil;
+import com.litesuits.orm.LiteOrm;
 
 import org.xutils.x;
 
@@ -30,6 +31,7 @@ public class BaseActivity extends AppCompatActivity {
     protected Context context;
     protected AccountMgr amr;
     protected DialogUtil dialogUtil;
+    protected static LiteOrm liteOrm;
 //    protected DBManager dbManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,10 @@ public class BaseActivity extends AppCompatActivity {
         application = (ClockApplication) getApplication();
         amr = new AccountMgr(context);
         dialogUtil = new DialogUtil();
+        if (liteOrm == null) {
+            liteOrm = LiteOrm.newSingleInstance(this, "liteorm.db");
+        }
+        liteOrm.setDebugged(true); // open the log
 //        dbManager = application.getDbManager();
     }
 //    protected void insertDB(ClockHistory clockHistory){

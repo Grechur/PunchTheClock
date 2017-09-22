@@ -9,9 +9,11 @@ package com.clock.zc.punchtheclock.util;
  * calarm_minute 设置打卡时间分钟
  * work_hour 设置上班时长
  * clock_type 设置打卡方式
+ * clock_hour 打卡的小时
+ * clock_minute 打卡的分钟
  */
 public enum UniqueKey {
 
-    calarm_math,calarm_hour,calarm_minute,work_hour,clock_type,
+    calarm_math,calarm_hour,calarm_minute,work_hour,clock_type,clock_hour,clock_minute
 
 }

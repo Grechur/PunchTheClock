@@ -2,6 +2,7 @@ package com.clock.zc.punchtheclock.ui;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.NumberPicker;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -39,6 +41,8 @@ public class SettingActivity extends BaseActivity {
     //选择时间Dialog
     private TimePickerDialog timePickerDialog;
     private Calendar calendar;
+    @ViewInject(R.id.rl_set)
+    private RelativeLayout rl_set;
     @ViewInject(R.id.tv_work_time)
     private TextView tv_work_time;
     @ViewInject(R.id.title)
@@ -74,8 +78,9 @@ public class SettingActivity extends BaseActivity {
         }
         String version = getVersion();
         tv_version.setText(version);
+
     }
-    @Event({R.id.back,R.id.rl_work_time,R.id.rl_work_hour,R.id.rl_clock_type})
+    @Event({R.id.back,R.id.rl_work_time,R.id.rl_work_hour,R.id.rl_clock_type,R.id.tv_version})
     private void onEvent(View v){
         switch (v.getId()) {
             case R.id.back:
@@ -89,6 +94,11 @@ public class SettingActivity extends BaseActivity {
                 break;
             case R.id.rl_clock_type:
                 showPopuType(title);
+                break;
+            case R.id.tv_version:
+                Intent intent = new Intent();
+                intent.setClass(context,HistoryActivity.class);
+                startActivity(intent);
                 break;
             default:
                 break;

@@ -6,6 +6,7 @@ def getDate() {
     def formattedDate = date.format('yyyyMMddHHmm')
     return formattedDate
 }
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
@@ -36,7 +37,7 @@ android {
         signingConfig signingConfigs.myConfig
         flavorDimensions "versionCode"
     }
-	lintOptions {//设置编译的lint开关，程序在buid的时候，会执行lint检查，有任何的错误或者警告提示，都会终止构建  
+    lintOptions {//设置编译的lint开关，程序在buid的时候，会执行lint检查，有任何的错误或者警告提示，都会终止构建  
         abortOnError false  
     }
     buildTypes {
@@ -79,9 +80,10 @@ android {
                 timeNow = JENKINS_TIME
                 if("".equals(APPNAME)){
                     newName = 'jenkins-yj-android-v' +
-                            APP_VERSION + '-'  + timeNow + '-' + variant.buildType.name + '.apk'//+ variant.productFlavors[0].name
+                            APP_VERSION + '-'  + timeNow + '-' + variant.buildType.name + '.apk'
+//+ variant.productFlavors[0].name
                 }else {
-                    newName = APK_NAME + timeNow+'.apk'//+ variant.productFlavors[0].name
+                    newName = APK_NAME + timeNow+'.apk' //+ variant.productFlavors[0].name
                 }
             } else {
                 timeNow = getDate()
@@ -89,7 +91,8 @@ android {
                     newName = "yj-android-v${APP_VERSION}-debug.apk"
                 } else {
                     newName = 'yj-android-v' +
-                            APP_VERSION + '-'  + timeNow + '-' + variant.buildType.name + '.apk'//+ variant.productFlavors[0].name
+                            APP_VERSION + '-'  + timeNow + '-' + variant.buildType.name + '.apk'
+//+ variant.productFlavors[0].name
                 }
             }
 
@@ -101,7 +104,11 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
-
+repositories {
+    maven {
+        url "https://jitpack.io"
+    }
+}
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -114,4 +121,11 @@ dependencies {
     //    compile 'org.greenrobot:greendao:3.1.0'
     //    compile 'org.greenrobot:greendao-generator:3.1.0'
     compile files('libs/lite-orm-1.9.2.jar')
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.github.sd6352051.niftydialogeffects:niftydialogeffects:1.0.0@aar'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.github.recruit-lifestyle:WaveSwipeRefreshLayout:1.6'
+    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
+    compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.3'
 }

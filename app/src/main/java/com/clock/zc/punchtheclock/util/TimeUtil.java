@@ -44,10 +44,27 @@ public class TimeUtil {
         String str = formatter.format(curDate);
         return str;
     }
-
+    public static String getData(Long time){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+        Date curDate = new Date(time);//获取当前时间
+        String str = formatter.format(curDate);
+        return str;
+    }
     public static String getDataHour(){
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
         Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+        String str = formatter.format(curDate);
+        return str;
+    }
+    public static String getDataYear(Long time){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日");
+        Date curDate = new Date(time);//获取当前时间
+        String str = formatter.format(curDate);
+        return str;
+    }
+    public static String getDataHour(Long time){
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
+        Date curDate = new Date(time);//获取当前时间
         String str = formatter.format(curDate);
         return str;
     }

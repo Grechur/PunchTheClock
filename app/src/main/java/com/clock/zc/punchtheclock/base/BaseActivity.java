@@ -2,15 +2,11 @@ package com.clock.zc.punchtheclock.base;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,20 +14,20 @@ import com.clock.zc.punchtheclock.R;
 //import com.clock.zc.punchtheclock.bean.ClockHistory;
 import com.clock.zc.punchtheclock.util.AccountMgr;
 //import com.clock.zc.punchtheclock.util.DBManager;
-import com.clock.zc.punchtheclock.util.DialogUtil;
+import com.clock.zc.punchtheclock.view.Explosion.ExplosionField;
+import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 import com.litesuits.orm.LiteOrm;
 
 import org.xutils.x;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class BaseActivity extends AppCompatActivity {
     protected ClockApplication application;
     protected Context context;
     protected AccountMgr amr;
-    protected DialogUtil dialogUtil;
+//    protected DialogUtil dialogUtil;
     protected static LiteOrm liteOrm;
+    protected NiftyDialogBuilder dialogBuilder;
+    protected ExplosionField explosionField;
 //    protected DBManager dbManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +36,13 @@ public class BaseActivity extends AppCompatActivity {
         context = this;
         application = (ClockApplication) getApplication();
         amr = new AccountMgr(context);
-        dialogUtil = new DialogUtil();
+//        dialogUtil = new DialogUtil();
         if (liteOrm == null) {
             liteOrm = LiteOrm.newSingleInstance(this, "liteorm.db");
         }
         liteOrm.setDebugged(true); // open the log
+        dialogBuilder=NiftyDialogBuilder.getInstance(context);
+        explosionField = new ExplosionField(context);
 //        dbManager = application.getDbManager();
     }
 //    protected void insertDB(ClockHistory clockHistory){

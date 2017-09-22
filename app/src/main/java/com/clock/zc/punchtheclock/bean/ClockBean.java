@@ -15,8 +15,10 @@ public class ClockBean {
     private int id;
     // 非空字段
     @NotNull
-    private String time;
+    private Long time;//打卡时间
     private int statue;
+    @NotNull
+    private int type;//打卡方式 0：手动打卡 1：WiFi打卡 2：摇一摇打卡
 
     public int getId() {
         return id;
@@ -26,11 +28,11 @@ public class ClockBean {
         this.id = id;
     }
 
-    public String getTime() {
+    public Long getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Long time) {
         this.time = time;
     }
 
@@ -40,5 +42,13 @@ public class ClockBean {
 
     public void setStatue(int statue) {
         this.statue = statue;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

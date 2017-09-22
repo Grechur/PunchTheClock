@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/rl_all"
     tools:context="com.clock.zc.punchtheclock.ui.MainActivity">
     <include layout="@layout/title_bar"
         android:id="@+id/head"/>
@@ -60,5 +61,15 @@
         android:gravity="center"
         android:textColor="@color/white"
         android:textSize="@dimen/text_waybill_detail_20"/>
-
+    <TextView
+        android:id="@+id/tv_off"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="下班时间：今天22:00"
+        android:textColor="@color/background"
+        android:textSize="@dimen/text_waybill_detail_20"
+        android:layout_marginBottom="80dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
 </RelativeLayout>

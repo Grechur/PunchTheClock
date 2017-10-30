@@ -9,4 +9,10 @@
     <dimen name="text_waybill_detail_16">16sp</dimen>
     <dimen name="text_waybill_detail_20">20sp</dimen>
     <dimen name="text_waybill_detail_26">26sp</dimen>
+
+    <integer name="anim_duration_very_long">1500</integer>
+    <integer name="anim_duration_long">500</integer>
+    <integer name="anim_duration_medium">300</integer>
+
+    <dimen name="spacing_medium">5dp</dimen>
 </resources>

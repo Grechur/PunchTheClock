@@ -1,16 +1,34 @@
 package com.clock.zc.punchtheclock.ui;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.DialogFragment;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ClipDrawable;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,42 +40,61 @@ import com.clock.zc.punchtheclock.base.BaseActivity;
 import com.clock.zc.punchtheclock.bean.ClockBean;
 import com.clock.zc.punchtheclock.reciver.AlarmReceiver;
 import com.clock.zc.punchtheclock.util.Content;
+import com.clock.zc.punchtheclock.util.EffectsDialogUtil;
 import com.clock.zc.punchtheclock.util.TimeUtil;
 import com.clock.zc.punchtheclock.util.UniqueKey;
+import com.clock.zc.punchtheclock.view.Explosion.ExplosionField;
+import com.clock.zc.punchtheclock.view.ShakeAnimator;
+import com.clock.zc.punchtheclock.view.StatusBarCompat;
+import com.clock.zc.punchtheclock.view.TransitionHelper;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 
-import org.xutils.view.annotation.ContentView;
-import org.xutils.view.annotation.Event;
-import org.xutils.view.annotation.ViewInject;
+//import org.xutils.view.annotation.ContentView;
+//import org.xutils.view.annotation.Event;
+//import org.xutils.view.annotation.ViewInject;
 
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
-@ContentView(R.layout.activity_main)
-public class MainActivity extends BaseActivity {
-    @ViewInject(R.id.rl_all)
-    private RelativeLayout rl_all;
-    @ViewInject(R.id.time)
-    private TextView time;
-    @ViewInject(R.id.back)
-    private ImageView back;
-    @ViewInject(R.id.title)
-    private TextView title;
-    @ViewInject(R.id.btn_title_right)
-    private TextView btn_title_right;
-    @ViewInject(R.id.tv_week)
-    private TextView tv_week;
-    @ViewInject(R.id.tv_hour)
-    private TextView tv_hour;
-    @ViewInject(R.id.tv_date)
-    private TextView tv_date;
-    @ViewInject(R.id.to_sensor)
-    private TextView to_sensor;
-    @ViewInject(R.id.tv_off)
-    private TextView tv_off;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+import static android.support.v4.widget.DrawerLayout.STATE_DRAGGING;
+import static android.support.v4.widget.DrawerLayout.STATE_SETTLING;
+
+//@ContentView(R.layout.activity_main)
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
+    @BindView(R.id.head)
+    RelativeLayout head;
+    @BindView(R.id.time)
+    TextView time;
+    @BindView(R.id.back)
+    ImageView back;
+    @BindView(R.id.title)
+    TextView title;
+    @BindView(R.id.btn_title_right)
+    TextView btn_title_right;
+    @BindView(R.id.tv_week)
+    TextView tv_week;
+    @BindView(R.id.tv_hour)
+    TextView tv_hour;
+    @BindView(R.id.tv_date)
+    TextView tv_date;
+    @BindView(R.id.to_sensor)
+    TextView to_sensor;
+    @BindView(R.id.tv_off)
+    TextView tv_off;
+
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+
+    View headerLayout;
 
     String lastDate="";//上次打卡时间
     String oldTime;
@@ -66,11 +103,91 @@ public class MainActivity extends BaseActivity {
     private long lastClickTime;
     AlarmManager am;
     MyHandler myHandler = null;
+    protected ExplosionField explosionField;
+    ObjectAnimator animator;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_drawer_layout);
+
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                //5.x开始需要把颜色设置透明，否则导航栏会呈现系统默认的浅灰色
+//                Window window = getWindow(); View decorView = window.getDecorView();
+//                //两个 flag 要结合使用，表示让应用的主体内容占用系统状态栏的空间
+//                int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+//                decorView.setSystemUiVisibility(option);
+//                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//                window.setStatusBarColor(Color.TRANSPARENT); //导航栏颜色也可以正常设置 //
+//                window.setNavigationBarColor(Color.TRANSPARENT);
+//            } else {
+//                Window window = getWindow();
+//                WindowManager.LayoutParams attributes = window.getAttributes();
+//                int flagTranslucentStatus = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+//                int flagTranslucentNavigation = WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
+//                attributes.flags |= flagTranslucentStatus; // attributes.flags |= flagTranslucentNavigation;
+//                window.setAttributes(attributes);
+//            }
+//        }
+
+
+        ButterKnife.bind(this);
+        explosionField = new ExplosionField(this);
+
+        //ActionBarDrawerToggle作用是在toolbar上创建一个点击弹出drawer的按钮而已
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+//                this, drawer, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.addDrawerListener(toggle);
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View view, float v) {}
+            @Override
+            public void onDrawerOpened(View view) {}
+            @Override
+            public void onDrawerClosed(View view) {}
+            @Override
+            public void onDrawerStateChanged(int i) {
+                if(i == STATE_DRAGGING){
+                    StatusBarCompat.compat(MainActivity.this, Color.TRANSPARENT);
+                }else if(i == STATE_SETTLING){
+                    StatusBarCompat.compat(MainActivity.this, getResources().getColor(R.color.background));
+                }else{
+                    if(drawer.isDrawerOpen(GravityCompat.START)){
+                        StatusBarCompat.compat(MainActivity.this, Color.TRANSPARENT);
+                    }else{
+                        StatusBarCompat.compat(MainActivity.this, getResources().getColor(R.color.background));
+                    }
+                }
+            }
+        });
+        //不写这句话，是没有按钮显示的
+//        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
+        headerLayout = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        headerLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent();
+                i.setClass(context, PersonCenterActivity.class);
+                Pair<View, String>[] pairs = TransitionHelper.createSafeTransitionParticipants(MainActivity.this, false,
+                        new Pair<>(headerLayout, "share_layout"));
+                ActivityOptionsCompat transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, pairs);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    startActivity(i, transitionActivityOptions.toBundle());
+                }else{
+                    startActivity(i);
+                }
+            }
+        });
+
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         title.setText("每日打卡");
-        back.setVisibility(View.GONE);
+//        back.setVisibility(View.GONE);
         btn_title_right.setBackgroundResource(R.mipmap.setting);
         setViewWH(btn_title_right);
         tv_week.setText(TimeUtil.getWeekString());
@@ -98,30 +215,50 @@ public class MainActivity extends BaseActivity {
         }else{
             to_sensor.setVisibility(View.GONE);
         }
-        myHandler = new MyHandler(MainActivity.this,dialogBuilder);
+        myHandler = new MyHandler(MainActivity.this,effectsDialogUtil);
 //        explosionField.addListener(dialogBuilder.getCurrentFocus());
-
+//        head.setBackgroundColor(Color.parseColor("#0000ff"));
+        if(drawer.isDrawerOpen(GravityCompat.START)){
+            StatusBarCompat.compat(this, Color.TRANSPARENT);
+        }else{
+            StatusBarCompat.compat(this, getResources().getColor(R.color.background));
+        }
+        boolean flag = amr.getInt(UniqueKey.calarm_hour,-1)==-1 && TextUtils.isEmpty(amr.getVal(UniqueKey.calarm_math));
+        if(flag){
+            animator = ShakeAnimator.nope(time);
+            animator.setRepeatCount(ValueAnimator.INFINITE);
+            animator.start();
+        }
     }
     private void setOffView(){
         tv_off.setVisibility(View.VISIBLE);
-        int off_hour = amr.getInt(UniqueKey.clock_hour,-1)+amr.getInt(UniqueKey.work_hour,-1);
-        String str = "";
-        if(off_hour>=24){//第二天下班
-            int diff = off_hour-24;
-            if(diff>=10){
-                str = "下班时间：明天"+diff+":"+amr.getInt(UniqueKey.clock_minute,-1);
-            }else{
-                str = "下班时间：明天0"+diff+":"+amr.getInt(UniqueKey.clock_minute,-1);
-            }
+        if(animator!=null && animator.isStarted()){
+            animator.cancel();
+        }
+        if(amr.getInt(UniqueKey.work_hour,-1)!=-1){
+            int off_hour = amr.getInt(UniqueKey.clock_hour,-1)+amr.getInt(UniqueKey.work_hour,-1);
+            String str = "";
+            if(off_hour>=24){//第二天下班
+                int diff = off_hour-24;
+                if(diff>=10){
+                    str = "下班时间：明天"+diff+":"+amr.getInt(UniqueKey.clock_minute,-1);
+                }else{
+                    str = "下班时间：明天0"+diff+":"+amr.getInt(UniqueKey.clock_minute,-1);
+                }
 
-            tv_off.setText(str);
-            startRemind(diff);
-        }else if(off_hour<24 && off_hour>0){//今天下班
-            tv_off.setText("下班时间：今天"+ off_hour+":"+amr.getInt(UniqueKey.clock_minute,-1));
-            startRemind(off_hour);
+                tv_off.setText(str);
+                startRemind(diff);
+            }else if(off_hour<24 && off_hour>0){//今天下班
+                tv_off.setText("下班时间：今天"+ off_hour+":"+amr.getInt(UniqueKey.clock_minute,-1));
+                startRemind(off_hour);
+            }else{
+                tv_off.setVisibility(View.GONE);
+            }
         }else{
             tv_off.setVisibility(View.GONE);
+            toast("您没有设置上班时长");
         }
+
     }
     private void setViewWH(View view){
         RelativeLayout.LayoutParams params =  (RelativeLayout.LayoutParams)view.getLayoutParams();
@@ -138,24 +275,29 @@ public class MainActivity extends BaseActivity {
     }
 
     private void clockByWifi(){
+
         String wifiName = getConnectWifiSsid();
-        String wifi = "YTO-YH1";
-        String wifi1= "YTO-YH";
+//        String wifi = "YTO-YH1";
+//        String wifi1= "YTO-YH";
 //        time.setText(wifiName);
         List<Integer> sList = TimeUtil.getDateListInt();
         int hour = sList.get(3);
         int minute = sList.get(4);
         if (amr.getInt(UniqueKey.calarm_hour, -1) != -1) {
-            if (hour < amr.getInt(UniqueKey.calarm_hour, -1) && (wifiName.equals(wifi) || wifiName.equals(wifi1))) {
-                setDB(hour,minute,1);
-            } else if (hour == amr.getInt(UniqueKey.calarm_hour, -1)) {
-                if (minute < amr.getInt(UniqueKey.calarm_minute, -1)) {
+            if(wifiName.contains("YTO-YH")){
+                if (hour < amr.getInt(UniqueKey.calarm_hour, -1)) {
                     setDB(hour,minute,1);
+                } else if (hour == amr.getInt(UniqueKey.calarm_hour, -1)) {
+                    if (minute < amr.getInt(UniqueKey.calarm_minute, -1)) {
+                        setDB(hour,minute,1);
+                    } else {
+                        toastCenter("很抱歉，你迟到了，明天加油哦");
+                    }
                 } else {
                     toastCenter("很抱歉，你迟到了，明天加油哦");
                 }
             } else {
-                toastCenter("很抱歉，你迟到了，明天加油哦");
+                toastCenter("不是工作WiFi，请切换");
             }
         } else {
             setDialog("提示", "请设置上班时间","确定","暂不设置");
@@ -168,26 +310,38 @@ public class MainActivity extends BaseActivity {
 //                }
 //            });
 //            toastCenter("请设置上班时间");
+
         }
     }
 
-    @Event({R.id.back,R.id.btn_title_right,R.id.time,R.id.to_sensor})
-    private void toggleEvent(View v){
+    @OnClick({R.id.back,R.id.btn_title_right,R.id.time,R.id.to_sensor})
+    void toggleEvent(View v){
         Intent intent = new Intent();
         switch (v.getId()) {
             case R.id.btn_title_right:
 
-                intent.setClass(this,SettingActivity.class);
-                startActivity(intent);
+//                intent.setClass(this,SettingActivity.class);
+//                startActivity(intent);
+                startAct(SettingActivity.class);
+
                 break;
             case R.id.time:
-                explosionField.explode(time);
+
                 setClockTime(0);
                 break;
             case R.id.to_sensor:
                 if(!TextUtils.isEmpty(sType)&&sType.equals(Content.SENSOR_TYPE)){
                     intent.setClass(this,SensorActivity.class);
                     startActivityForResult(intent,101);
+                }
+                break;
+            case R.id.back:
+                if (drawer.isDrawerOpen(GravityCompat.START)) {
+                    drawer.closeDrawer(GravityCompat.START);
+                    StatusBarCompat.compat(this, getResources().getColor(R.color.background));
+                } else {
+                    drawer.openDrawer(GravityCompat.START);
+                    StatusBarCompat.compat(this, Color.TRANSPARENT);
                 }
                 break;
             default:
@@ -200,6 +354,14 @@ public class MainActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==101&&resultCode==102) {
             setClockTime(2);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(animator!=null && animator.isStarted()){
+            animator.cancel();
         }
     }
 
@@ -221,6 +383,7 @@ public class MainActivity extends BaseActivity {
         liteOrm.insert(clockBean);
         time.setText("今日打卡时间:" + TimeUtil.getDataHour());
         setOffView();
+
     }
     private void setClockTime(int type){
         long start = System.currentTimeMillis();
@@ -233,9 +396,11 @@ public class MainActivity extends BaseActivity {
                 int hour = sList.get(3);
                 int minute = sList.get(4);
                 if (hour < amr.getInt(UniqueKey.calarm_hour, -1)) {
+                    explosionField.explode(time);
                     setDB(hour,minute,type);
                 } else if (hour == amr.getInt(UniqueKey.calarm_hour, -1)) {
                     if (minute < amr.getInt(UniqueKey.calarm_minute, -1)) {
+                        explosionField.explode(time);
                         setDB(hour,minute,type);
                     } else {
                         toastCenter("很抱歉，你迟到了，明天加油哦");
@@ -289,38 +454,49 @@ public class MainActivity extends BaseActivity {
     * Effectstype.Shake
     * */
     private void setDialog(String title,String msg,String sure,String cancle){//
-        dialogBuilder
-                .withTitle(title)                                  //.withTitle(null)  no title
-                .withTitleColor("#FFFFFF")                                  //def
-                .withDividerColor("#11000000")                              //def
-                .withMessage(msg)                     //.withMessage(null)  no Msg
-                .withMessageColor("#FFFFFFFF")                              //def  | withMessageColor(int resid)
-                .withDialogColor("#00aeFF")                               //def  | withDialogColor(int resid)                               //def
-//                .withIcon(getResources().getDrawable(R.drawable.icon))
-                .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
-                .withDuration(700)                                          //def
-                .withEffect(Effectstype.Newspager)                                         //def Effectstype.Slidetop
-                .withButton1Text(sure)                                      //def gone
-                .withButton2Text(cancle)                                  //def gone
-//                .setCustomView(R.layout.custom_view,v.getContext())         //.setCustomView(View or ResId,context)
-                .setButton1Click(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-//                        Toast.makeText(v.getContext(), "i'm btn1", Toast.LENGTH_SHORT).show();
-                        explosionField.explode(v.getRootView(),myHandler);
-//                        dialogBuilder.dismiss();
-                    }
-                })
-                .isCancelableOnTouchOutside(false)
-                .setButton2Click(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-//                        Toast.makeText(v.getContext(), "i'm btn2", Toast.LENGTH_SHORT).show();
+//        dialogBuilder
+//                .withTitle(title)                                  //.withTitle(null)  no title
+//                .withTitleColor("#FFFFFF")                                  //def
+//                .withDividerColor("#11000000")                              //def
+//                .withMessage(msg)                     //.withMessage(null)  no Msg
+//                .withMessageColor("#FFFFFFFF")                              //def  | withMessageColor(int resid)
+//                .withDialogColor("#00aeFF")                               //def  | withDialogColor(int resid)                               //def
+////                .withIcon(getResources().getDrawable(R.drawable.icon))
+//                .isCancelableOnTouchOutside(true)                           //def    | isCancelable(true)
+//                .withDuration(700)                                          //def
+//                .withEffect(Effectstype.Newspager)                                         //def Effectstype.Slidetop
+//                .withButton1Text(sure)                                      //def gone
+//                .withButton2Text(cancle)                                  //def gone
+////                .setCustomView(R.layout.custom_view,v.getContext())         //.setCustomView(View or ResId,context)
+//                .setButton1Click(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+////                        Toast.makeText(v.getContext(), "i'm btn1", Toast.LENGTH_SHORT).show();
 //                        explosionField.explode(v.getRootView(),myHandler);
-                        dialogBuilder.dismiss();
-                    }
-                })
-                .show();
+////                        dialogBuilder.dismiss();
+//                    }
+//                })
+//                .isCancelableOnTouchOutside(false)
+//                .setButton2Click(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+////                        Toast.makeText(v.getContext(), "i'm btn2", Toast.LENGTH_SHORT).show();
+////                        explosionField.explode(v.getRootView(),myHandler);
+//                        dialogBuilder.dismiss();
+//                    }
+//                })
+//                .show();
+        effectsDialogUtil.createDoubleDialog(context, title, Effectstype.Newspager, msg, sure, cancle, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                explosionField.explode(v.getRootView(),myHandler);
+            }
+        }, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                effectsDialogUtil.cancleDialog();
+            }
+        });
 
     }
     /**
@@ -397,29 +573,63 @@ public class MainActivity extends BaseActivity {
         Toast.makeText(this, "关闭了提醒", Toast.LENGTH_SHORT).show();
 
     }
+    @Override
+    public void onBackPressed() {
+
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        int id = menuItem.getItemId();
+
+        if (id == R.id.nav_camera) {
+            // 点击侧边栏第一项打开新的activity，看不同主题的影响
+//            Intent intent = new Intent(MainActivity.this,SettingActivity.class);
+//            startActivity(intent);
+            startAct(SettingActivity.class);
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }
+
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
     private class MyHandler extends Handler {
         private final WeakReference<MainActivity> mActivity;
-        private NiftyDialogBuilder diaBul;
+        private final WeakReference<EffectsDialogUtil> diaBul;
 
-        public MyHandler(MainActivity activity,NiftyDialogBuilder dialog) {
+        public MyHandler(MainActivity activity,EffectsDialogUtil dialog) {
             mActivity = new WeakReference<MainActivity>(activity);
-            diaBul = dialog;
+            diaBul = new WeakReference<EffectsDialogUtil>(dialog);
         }
 
         @Override
         public void handleMessage(Message msg) {
             System.out.println(msg);
             final Activity activity=mActivity.get();
+            final EffectsDialogUtil dialog = diaBul.get();
             if (mActivity.get() == null) {
                 return;
             }
             if(msg.what==0){
-                if(diaBul!=null&&diaBul.isShowing()){
-                    diaBul.dismiss();
-                    Intent intent = new Intent();
-                    intent.setClass(activity,SettingActivity.class);
-                    activity.startActivity(intent);
-                }
+//                    Intent intent = new Intent();
+//                    intent.setClass(activity,SettingActivity.class);
+//                    activity.startActivity(intent);
+                dialog.cancleDialog();
+                startAct(SettingActivity.class);
             }
         }
     }

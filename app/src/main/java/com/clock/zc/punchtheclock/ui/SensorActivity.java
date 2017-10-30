@@ -24,13 +24,17 @@ import android.widget.TextView;
 import com.clock.zc.punchtheclock.R;
 import com.clock.zc.punchtheclock.base.BaseActivity;
 
-import org.xutils.view.annotation.ContentView;
-import org.xutils.view.annotation.Event;
-import org.xutils.view.annotation.ViewInject;
+//import org.xutils.view.annotation.ContentView;
+//import org.xutils.view.annotation.Event;
+//import org.xutils.view.annotation.ViewInject;
 
 import java.lang.ref.WeakReference;
 
-@ContentView(R.layout.activity_sensor)
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+//@ContentView(R.layout.activity_sensor)
 public class SensorActivity extends BaseActivity implements SensorEventListener {
     private static final String TAG = "SensorActivity";
     private SensorManager mSensorManager;
@@ -40,14 +44,16 @@ public class SensorActivity extends BaseActivity implements SensorEventListener 
     //记录摇动状态
     private boolean isShake = false;
 
-    @ViewInject(R.id.main_linear_top)
-    private LinearLayout mTopLayout;
-    @ViewInject(R.id.main_linear_bottom)
-    private LinearLayout mBottomLayout;
-    @ViewInject(R.id.main_shake_top_line)
-    private ImageView mTopLine;
-    @ViewInject(R.id.main_shake_bottom_line)
-    private ImageView mBottomLine;
+    @BindView(R.id.main_linear_top)
+    LinearLayout mTopLayout;
+    @BindView(R.id.main_linear_bottom)
+    LinearLayout mBottomLayout;
+    @BindView(R.id.main_shake_top_line)
+    ImageView mTopLine;
+    @BindView(R.id.main_shake_bottom_line)
+    ImageView mBottomLine;
+    @BindView(R.id.title)
+    TextView titile;
 
     private MyHandler mHandler;
     private int mWeiChatAudio;
@@ -55,13 +61,14 @@ public class SensorActivity extends BaseActivity implements SensorEventListener 
     private static final int AGAIN_SHAKE = 0x2;
     private static final int END_SHAKE = 0x3;
 
-    @ViewInject(R.id.title)
-    private TextView titile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //设置只竖屏
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setContentView(R.layout.activity_sensor);
+        ButterKnife.bind(this);
         //初始化View
         initView();
         mHandler = new MyHandler((SensorActivity) context);
@@ -82,10 +89,14 @@ public class SensorActivity extends BaseActivity implements SensorEventListener 
 
 
     }
-    @Event(R.id.btn_title_right)
-    private void btn(View view){
-        setResult(103);
-        finish();
+    @OnClick({R.id.btn_title_right,R.id.back})
+    void btn(View view){
+        switch (view.getId()){
+            case R.id.back:
+                setResult(103);
+                finish();
+                break;
+        }
     }
 
     @Override

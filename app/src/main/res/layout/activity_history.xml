@@ -9,7 +9,7 @@
     <include layout="@layout/title_bar"
         android:id="@+id/head"/>
 
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+    <com.clock.zc.punchtheclock.view.smart.SmartRefreshLayout
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,7 +18,7 @@
         app:srlAccentColor="@android:color/white"
         android:layout_below="@+id/head"
         app:srlEnableLoadmore="false">
-        <com.scwang.smartrefresh.header.WaveSwipeHeader
+        <com.clock.zc.punchtheclock.view.wave.WaveSwipeHeader
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <android.support.v7.widget.RecyclerView
@@ -28,5 +28,5 @@
             android:layout_height="match_parent">
 
         </android.support.v7.widget.RecyclerView>
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+    </com.clock.zc.punchtheclock.view.smart.SmartRefreshLayout>
 </RelativeLayout>

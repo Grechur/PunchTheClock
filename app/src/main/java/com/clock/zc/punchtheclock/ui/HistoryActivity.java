@@ -18,35 +18,39 @@ import com.clock.zc.punchtheclock.base.BaseActivity;
 import com.clock.zc.punchtheclock.bean.ClockBean;
 import com.clock.zc.punchtheclock.util.Content;
 import com.clock.zc.punchtheclock.util.TimeUtil;
-import com.clock.zc.punchtheclock.view.CircleRefresh.CircleRefreshLayout;
 import com.clock.zc.punchtheclock.view.MyDecoration;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.clock.zc.punchtheclock.view.smart.SmartRefreshLayout;
+import com.clock.zc.punchtheclock.view.smart.api.RefreshLayout;
+import com.clock.zc.punchtheclock.view.smart.listener.OnRefreshListener;
 
-import org.xutils.view.annotation.ContentView;
-import org.xutils.view.annotation.Event;
-import org.xutils.view.annotation.ViewInject;
+//import org.xutils.view.annotation.ContentView;
+//import org.xutils.view.annotation.Event;
+//import org.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-@ContentView(R.layout.activity_history)
-public class HistoryActivity extends BaseActivity implements OnRefreshListener{
-    @ViewInject(R.id.refreshLayout)
-    private SmartRefreshLayout refreshLayout;
-    @ViewInject(R.id.recyclerview)
-    private RecyclerView recyclerview;
-    @ViewInject(R.id.title)
-    private TextView title;
+
+//@ContentView(R.layout.activity_history)
+public class HistoryActivity extends BaseActivity implements OnRefreshListener {
+    @BindView(R.id.refreshLayout)
+    SmartRefreshLayout refreshLayout;
+    @BindView(R.id.recyclerview)
+    RecyclerView recyclerview;
+    @BindView(R.id.title)
+    TextView title;
 
     private HistoryAdapter adapter;
     private List<ClockBean> cList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_history);
+        ButterKnife.bind(this);
         title.setText("历史打卡记录");
         if (cList == null) cList = new ArrayList<ClockBean>();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -80,17 +84,18 @@ public class HistoryActivity extends BaseActivity implements OnRefreshListener{
         refrsh();
     }
 
-    @Event({R.id.back})
-    private void toggleEvent(View v){
+    @OnClick({R.id.back})
+    void toggleEvent(View v){
         Intent intent = new Intent();
         switch (v.getId()) {
             case R.id.back:
-                finish();
+                onBackPressed();
                 break;
             default:
                 break;
         }
     }
+
 
     class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHolder>
     {

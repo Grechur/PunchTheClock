@@ -6,7 +6,10 @@
     android:layout_height="45dp"
     android:background="@color/background"
     android:orientation="horizontal">
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true">
     <ImageView
         android:id="@+id/back"
         android:layout_width="wrap_content"
@@ -15,7 +18,8 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="6dp"
         android:padding="10dp"
-        android:src="@mipmap/nav_btn_back_android"/>
+        android:src="@mipmap/nav_btn_back_android"
+        android:background="?android:attr/selectableItemBackground"/>
 
     <TextView
         android:id="@+id/title"
@@ -57,5 +61,5 @@
         android:textColor="@android:color/white"
         android:textSize="@dimen/text_waybill_detail_16"
         android:visibility="visible"/>
-
+    </RelativeLayout>
 </RelativeLayout>

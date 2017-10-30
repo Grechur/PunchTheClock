@@ -37,22 +37,8 @@
             android:name=".reciver.AlarmReceiver"
             android:process=":remote" />
 
-        <service android:name=".service.UploadPOIService">
-            <intent-filter>
-                <action android:name="com.coder80.timer.service.UploadPOIService" />
-            </intent-filter>
-        </service>
-
-        <receiver
-            android:name=".reciver.BootBroadcastReceiver"
-            android:exported="false">
-            <intent-filter android:priority="1000">
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.USER_PRESENT" />
-            </intent-filter>
-        </receiver>
-
-        <activity android:name=".ui.HistoryActivity"></activity>
+        <activity android:name=".ui.HistoryActivity" />
+        <activity android:name=".ui.PersonCenterActivity"></activity>
     </application>
 
 </manifest>

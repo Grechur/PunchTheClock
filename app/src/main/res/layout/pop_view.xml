@@ -4,14 +4,14 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/ll_hour"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
             android:background="@color/background">
@@ -19,16 +19,21 @@
             <NumberPicker
                 android:id="@+id/hourpicker"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:descendantFocusability="blocksDescendants"
+                />
 
             <TextView
                 android:id="@+id/tv_instruction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:gravity="center_horizontal"
                 android:text="小时"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_waybill_detail_16"
+                android:layout_weight="1"
                 />
         </LinearLayout>
 

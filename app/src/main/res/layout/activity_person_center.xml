@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.clock.zc.punchtheclock.ui.PersonCenterActivity">
+    <include layout="@layout/title_bar"
+        android:id="@+id/head"/>
+    <RelativeLayout
+        android:id="@+id/rl_center"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_below="@+id/head"
+        android:transitionName="share_layout">
+        <ImageView
+            android:id="@+id/iv_bg"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:src="@color/gray"/>
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:background="@color/background">
+            <ImageView
+                android:id="@+id/iv_user_img"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/circle_shape"/>
+            <!--<com.sunfusheng.glideimageview.GlideImageView-->
+                <!--android:id="@+id/iv_user_img"-->
+                <!--android:layout_width="50dp"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--app:siv_border_width="1dp"-->
+                <!--app:siv_shape_type="circle"/>-->
+            <TextView
+                android:id="@+id/tv_user_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="name"
+                android:gravity="center_horizontal"
+                android:textSize="@dimen/text_waybill_detail_20"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

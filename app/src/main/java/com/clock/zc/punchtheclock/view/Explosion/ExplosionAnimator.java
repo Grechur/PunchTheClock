@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -63,6 +64,7 @@ public class ExplosionAnimator extends ValueAnimator{
             for (Particle p : particle) {
                 p.advance((Float) getAnimatedValue());
                 mPaint.setColor(p.color);
+//                Log.d("---------color",p.color+"");
 //                mPaint.setAlpha((int) (255 * p.alpha)); //只是这样设置，透明色会显示为黑色
                 mPaint.setAlpha((int) (Color.alpha(p.color) * p.alpha)); //这样透明颜色就不是黑色了
                 canvas.drawCircle(p.cx, p.cy, p.radius, mPaint);

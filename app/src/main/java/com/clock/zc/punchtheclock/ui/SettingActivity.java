@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -27,32 +28,36 @@ import com.clock.zc.punchtheclock.util.AccountMgr;
 import com.clock.zc.punchtheclock.util.Content;
 import com.clock.zc.punchtheclock.util.UniqueKey;
 
-import org.w3c.dom.Text;
-import org.xutils.view.annotation.ContentView;
-import org.xutils.view.annotation.Event;
-import org.xutils.view.annotation.ViewInject;
-import org.xutils.x;
+//import org.w3c.dom.Text;
+//import org.xutils.view.annotation.ContentView;
+//import org.xutils.view.annotation.Event;
+//import org.xutils.view.annotation.ViewInject;
+//import org.xutils.x;
 
 import java.util.Calendar;
 
-@ContentView(R.layout.activity_setting)
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+//@ContentView(R.layout.activity_setting)
 public class SettingActivity extends BaseActivity {
 
     //选择时间Dialog
     private TimePickerDialog timePickerDialog;
     private Calendar calendar;
-    @ViewInject(R.id.rl_set)
-    private RelativeLayout rl_set;
-    @ViewInject(R.id.tv_work_time)
-    private TextView tv_work_time;
-    @ViewInject(R.id.title)
-    private TextView title;
-    @ViewInject(R.id.tv_work_hour)
-    private TextView tv_work_hour;
-    @ViewInject(R.id.tv_clock_type)
-    private TextView tv_clock_type;
-    @ViewInject(R.id.tv_version)
-    private TextView tv_version;
+    @BindView(R.id.rl_set)
+    RelativeLayout rl_set;
+    @BindView(R.id.tv_work_time)
+    TextView tv_work_time;
+    @BindView(R.id.title)
+    TextView title;
+    @BindView(R.id.tv_work_hour)
+    TextView tv_work_hour;
+    @BindView(R.id.tv_clock_type)
+    TextView tv_clock_type;
+    @BindView(R.id.tv_version)
+    TextView tv_version;
 
 
 
@@ -61,7 +66,8 @@ public class SettingActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_setting);
+        ButterKnife.bind(this);
         calendar = Calendar.getInstance();
         title.setText("设置");
         if(amr.getInt(UniqueKey.calarm_hour,-1)!=-1){
@@ -80,11 +86,11 @@ public class SettingActivity extends BaseActivity {
         tv_version.setText(version);
 
     }
-    @Event({R.id.back,R.id.rl_work_time,R.id.rl_work_hour,R.id.rl_clock_type,R.id.tv_version})
-    private void onEvent(View v){
+    @OnClick({R.id.back,R.id.rl_work_time,R.id.rl_work_hour,R.id.rl_clock_type,R.id.tv_version})
+    void onEvent(View v){
         switch (v.getId()) {
             case R.id.back:
-                finish();
+                onBackPressed();
                 break;
             case R.id.rl_work_time:
                 showTime();
@@ -96,9 +102,10 @@ public class SettingActivity extends BaseActivity {
                 showPopuType(title);
                 break;
             case R.id.tv_version:
-                Intent intent = new Intent();
-                intent.setClass(context,HistoryActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent();
+//                intent.setClass(context,HistoryActivity.class);
+//                startActivity(intent);
+                startAct(HistoryActivity.class);
                 break;
             default:
                 break;
@@ -145,6 +152,7 @@ public class SettingActivity extends BaseActivity {
                 popupWindow.dismiss();
             }
         });
+
         contentview.findViewById(R.id.tv_cancle).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

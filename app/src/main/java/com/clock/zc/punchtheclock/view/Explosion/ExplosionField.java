@@ -91,6 +91,7 @@ public class ExplosionField extends View{
         Rect rect = new Rect();
         view.getGlobalVisibleRect(rect); //得到view相对于整个屏幕的坐标
         rect.offset(0, -Utils.dp2px(25)); //去掉状态栏高度
+//        rect.offset(0, 0);//因为我的是全屏显示不需要去状态栏
 
         final ExplosionAnimator animator = new ExplosionAnimator(this, createBitmapFromView(view), rect);
         explosionAnimators.add(animator);

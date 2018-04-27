@@ -15,11 +15,11 @@ public class AccountMgr extends PrefMgr {
 		getEditor().clear().commit();
 	}
 
-	public String getVal(UniqueKey key) {
+	public String getVal(@UniqueKeyAnn.AllKey String key) {
 		return getString(key);
 	}
 
-	public String getVal(UniqueKey key, String defVal) {
+	public String getVal(@UniqueKeyAnn.AllKey String key, String defVal) {
 		return getString(key, defVal);
 	}
 }

@@ -42,17 +42,12 @@ import com.clock.zc.punchtheclock.reciver.AlarmReceiver;
 import com.clock.zc.punchtheclock.util.Content;
 import com.clock.zc.punchtheclock.util.EffectsDialogUtil;
 import com.clock.zc.punchtheclock.util.TimeUtil;
-import com.clock.zc.punchtheclock.util.UniqueKey;
+import com.clock.zc.punchtheclock.util.UniqueKeyAnn;
 import com.clock.zc.punchtheclock.view.Explosion.ExplosionField;
 import com.clock.zc.punchtheclock.view.ShakeAnimator;
 import com.clock.zc.punchtheclock.view.StatusBarCompat;
 import com.clock.zc.punchtheclock.view.TransitionHelper;
 import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
-import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
-
-//import org.xutils.view.annotation.ContentView;
-//import org.xutils.view.annotation.Event;
-//import org.xutils.view.annotation.ViewInject;
 
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
@@ -105,6 +100,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     MyHandler myHandler = null;
     protected ExplosionField explosionField;
     ObjectAnimator animator;
+    private EffectsDialogUtil effectsDialogUtil;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -193,7 +190,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         tv_week.setText(TimeUtil.getWeekString());
         tv_hour.setText(TimeUtil.getDataHour());
         tv_date.setText(TimeUtil.StringData());
-        lastDate = amr.getVal(UniqueKey.calarm_math);
+        lastDate = amr.getVal(UniqueKeyAnn.CALARM_MONTH);
 
         oldTime = TimeUtil.getYMD(lastDate);
         newTime = TimeUtil.getYMD(TimeUtil.getData());
@@ -201,7 +198,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             time.setText("今日打卡时间:"+TimeUtil.getHM(lastDate));
             setOffView();
         }
-        sType = amr.getString(UniqueKey.clock_type);
+        sType = amr.getString(UniqueKeyAnn.CLOCK_TYPE);
         if(!TextUtils.isEmpty(sType)){
             to_sensor.setVisibility(View.VISIBLE);
             to_sensor.setText(sType+"打卡");
@@ -223,7 +220,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }else{
             StatusBarCompat.compat(this, getResources().getColor(R.color.background));
         }
-        boolean flag = amr.getInt(UniqueKey.calarm_hour,-1)==-1 && TextUtils.isEmpty(amr.getVal(UniqueKey.calarm_math));
+        boolean flag = amr.getInt(UniqueKeyAnn.CALARM_HOUR,-1)==-1 && TextUtils.isEmpty(amr.getVal(UniqueKeyAnn.CALARM_MONTH));
         if(flag){
             animator = ShakeAnimator.nope(time);
             animator.setRepeatCount(ValueAnimator.INFINITE);
@@ -235,21 +232,21 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if(animator!=null && animator.isStarted()){
             animator.cancel();
         }
-        if(amr.getInt(UniqueKey.work_hour,-1)!=-1){
-            int off_hour = amr.getInt(UniqueKey.clock_hour,-1)+amr.getInt(UniqueKey.work_hour,-1);
+        if(amr.getInt(UniqueKeyAnn.WORK_HOUR,-1)!=-1){
+            int off_hour = amr.getInt(UniqueKeyAnn.CLOCK_HOUR,-1)+amr.getInt(UniqueKeyAnn.WORK_HOUR,-1);
             String str = "";
             if(off_hour>=24){//第二天下班
                 int diff = off_hour-24;
                 if(diff>=10){
-                    str = "下班时间：明天"+diff+":"+amr.getInt(UniqueKey.clock_minute,-1);
+                    str = "下班时间：明天"+diff+":"+amr.getInt(UniqueKeyAnn.CLOCK_MINUTE,-1);
                 }else{
-                    str = "下班时间：明天0"+diff+":"+amr.getInt(UniqueKey.clock_minute,-1);
+                    str = "下班时间：明天0"+diff+":"+amr.getInt(UniqueKeyAnn.CLOCK_MINUTE,-1);
                 }
 
                 tv_off.setText(str);
                 startRemind(diff);
             }else if(off_hour<24 && off_hour>0){//今天下班
-                tv_off.setText("下班时间：今天"+ off_hour+":"+amr.getInt(UniqueKey.clock_minute,-1));
+                tv_off.setText("下班时间：今天"+ off_hour+":"+amr.getInt(UniqueKeyAnn.CLOCK_MINUTE,-1));
                 startRemind(off_hour);
             }else{
                 tv_off.setVisibility(View.GONE);
@@ -283,12 +280,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         List<Integer> sList = TimeUtil.getDateListInt();
         int hour = sList.get(3);
         int minute = sList.get(4);
-        if (amr.getInt(UniqueKey.calarm_hour, -1) != -1) {
+        if (amr.getInt(UniqueKeyAnn.CALARM_HOUR, -1) != -1) {
             if(wifiName.contains("YTO-YH")){
-                if (hour < amr.getInt(UniqueKey.calarm_hour, -1)) {
+                if (hour < amr.getInt(UniqueKeyAnn.CALARM_HOUR, -1)) {
                     setDB(hour,minute,1);
-                } else if (hour == amr.getInt(UniqueKey.calarm_hour, -1)) {
-                    if (minute < amr.getInt(UniqueKey.calarm_minute, -1)) {
+                } else if (hour == amr.getInt(UniqueKeyAnn.CALARM_HOUR, -1)) {
+                    if (minute < amr.getInt(UniqueKeyAnn.CALARM_MINUTE, -1)) {
                         setDB(hour,minute,1);
                     } else {
                         toastCenter("很抱歉，你迟到了，明天加油哦");
@@ -373,9 +370,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         myHandler.removeMessages(1);
     }
     private void setDB(int hour,int minute,int type){
-        amr.putString(UniqueKey.calarm_math, TimeUtil.getData());
-        amr.putInt(UniqueKey.clock_hour,hour);
-        amr.putInt(UniqueKey.clock_minute,minute);
+        amr.putString(UniqueKeyAnn.CALARM_MONTH, TimeUtil.getData());
+        amr.putInt(UniqueKeyAnn.CLOCK_HOUR,hour);
+        amr.putInt(UniqueKeyAnn.CLOCK_MINUTE,minute);
         ClockBean clockBean = new ClockBean();
         clockBean.setTime(System.currentTimeMillis());
         clockBean.setStatue(1);
@@ -387,19 +384,19 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
     private void setClockTime(int type){
         long start = System.currentTimeMillis();
-        lastDate = amr.getVal(UniqueKey.calarm_math);
+        lastDate = amr.getVal(UniqueKeyAnn.CALARM_MONTH);
         oldTime = TimeUtil.getYMD(lastDate);
         newTime = TimeUtil.getYMD(TimeUtil.getData());
-        if (amr.getInt(UniqueKey.calarm_hour, -1) != -1) {
+        if (amr.getInt(UniqueKeyAnn.CALARM_HOUR, -1) != -1) {
             if (!oldTime.equals(newTime)) {
                 List<Integer> sList = TimeUtil.getDateListInt();
                 int hour = sList.get(3);
                 int minute = sList.get(4);
-                if (hour < amr.getInt(UniqueKey.calarm_hour, -1)) {
+                if (hour < amr.getInt(UniqueKeyAnn.CALARM_HOUR, -1)) {
                     explosionField.explode(time);
                     setDB(hour,minute,type);
-                } else if (hour == amr.getInt(UniqueKey.calarm_hour, -1)) {
-                    if (minute < amr.getInt(UniqueKey.calarm_minute, -1)) {
+                } else if (hour == amr.getInt(UniqueKeyAnn.CALARM_HOUR, -1)) {
+                    if (minute < amr.getInt(UniqueKeyAnn.CALARM_MINUTE, -1)) {
                         explosionField.explode(time);
                         setDB(hour,minute,type);
                     } else {
@@ -518,7 +515,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         //设置在几点提醒  设置的为13点
         mCalendar.set(Calendar.HOUR_OF_DAY, hour);
         //设置在几分提醒  设置的为25分
-        mCalendar.set(Calendar.MINUTE, amr.getInt(UniqueKey.clock_minute,-1));
+        mCalendar.set(Calendar.MINUTE, amr.getInt(UniqueKeyAnn.CLOCK_MINUTE,-1));
         //下面这两个看字面意思也知道
         mCalendar.set(Calendar.SECOND, 0);
         mCalendar.set(Calendar.MILLISECOND, 0);
@@ -609,6 +606,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private class MyHandler extends Handler {
         private final WeakReference<MainActivity> mActivity;
+
         private final WeakReference<EffectsDialogUtil> diaBul;
 
         public MyHandler(MainActivity activity,EffectsDialogUtil dialog) {

@@ -3,12 +3,12 @@
 
     >
 
- <!--<fade android:duration="500">-->
-    <!--<targets>-->
-        <!--<target android:targetId="@android:id/statusBarBackground"></target>-->
-        <!--<target android:targetId="@id/rl_center"></target>-->
-    <!--</targets>-->
- <!--</fade>-->
+ <fade android:duration="500">
+    <targets>
+        <target android:targetId="@android:id/statusBarBackground"></target>
+        <target android:targetId="@id/rl_center"></target>
+    </targets>
+ </fade>
 
   <!--<slide android:startDelay="600">-->
       <!--<targets >-->
@@ -21,10 +21,10 @@
         <!--</targets>-->
     <!--</slide>-->
 
-<!--<slide android:slideEdge="left"  android:startDelay="500">-->
-    <!--<targets >-->
-        <!--<target android:targetId="@id/tv_show"></target>-->
-    <!--</targets>-->
-<!--</slide>-->
+<slide android:slideEdge="left"  android:startDelay="500">
+    <targets >
+        <target android:targetId="@id/rl_center"></target>
+    </targets>
+</slide>
 
 </transitionSet>

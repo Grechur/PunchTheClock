@@ -1,5 +1,6 @@
 package com.clock.zc.punchtheclock.ui;
 
+import android.app.job.JobService;
 import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -54,7 +55,6 @@ public class SensorActivity extends BaseActivity implements SensorEventListener 
     ImageView mBottomLine;
     @BindView(R.id.title)
     TextView titile;
-
     private MyHandler mHandler;
     private int mWeiChatAudio;
     private static final int START_SHAKE = 0x1;

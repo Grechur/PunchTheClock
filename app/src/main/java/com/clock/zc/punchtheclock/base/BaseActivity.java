@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Color;
+import android.media.effect.EffectFactory;
 import android.os.Build;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
@@ -14,8 +14,6 @@ import android.transition.Slide;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,8 +21,6 @@ import com.clock.zc.punchtheclock.R;
 //import com.clock.zc.punchtheclock.bean.ClockHistory;
 import com.clock.zc.punchtheclock.util.AccountMgr;
 //import com.clock.zc.punchtheclock.util.DBManager;
-import com.clock.zc.punchtheclock.util.EffectsDialogUtil;
-import com.clock.zc.punchtheclock.view.Explosion.ExplosionField;
 import com.clock.zc.punchtheclock.view.StatusBarCompat;
 import com.clock.zc.punchtheclock.view.TransitionHelper;
 import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
@@ -38,7 +34,7 @@ public class BaseActivity extends AppCompatActivity {
     protected AccountMgr amr;
 //    protected DialogUtil dialogUtil;
     protected static LiteOrm liteOrm;
-    protected EffectsDialogUtil effectsDialogUtil;
+    protected NiftyDialogBuilder dialogBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +51,8 @@ public class BaseActivity extends AppCompatActivity {
             liteOrm = LiteOrm.newSingleInstance(this, "liteorm.db");
         }
         liteOrm.setDebugged(true); // open the log
-//        dialogBuilder=NiftyDialogBuilder.getInstance(context);
+        dialogBuilder= NiftyDialogBuilder.getInstance(context);
 //        explosionField = new ExplosionField(context);
-        effectsDialogUtil = new EffectsDialogUtil();
     }
 
     protected int dip2px(Context context,float dipValue)

@@ -27,6 +27,9 @@ import com.clock.zc.punchtheclock.base.BaseActivity;
 import com.clock.zc.punchtheclock.util.AccountMgr;
 import com.clock.zc.punchtheclock.util.Content;
 import com.clock.zc.punchtheclock.util.UniqueKey;
+import com.clock.zc.punchtheclock.util.UniqueKeyAnn;
+
+import static com.clock.zc.punchtheclock.util.UniqueKeyAnn.*;
 
 //import org.w3c.dom.Text;
 //import org.xutils.view.annotation.ContentView;
@@ -70,16 +73,16 @@ public class SettingActivity extends BaseActivity {
         ButterKnife.bind(this);
         calendar = Calendar.getInstance();
         title.setText("设置");
-        if(amr.getInt(UniqueKey.calarm_hour,-1)!=-1){
-            String str = amr.getInt(UniqueKey.calarm_hour,-1)+":"+amr.getInt(UniqueKey.calarm_minute,-1);
+        if(amr.getInt(UniqueKeyAnn.CALARM_HOUR,-1)!=-1){
+            String str = amr.getInt(UniqueKeyAnn.CALARM_HOUR,-1)+":"+amr.getInt(UniqueKeyAnn.CALARM_MINUTE,-1);
             tv_work_time.setText(str);
         }
-        if(amr.getInt(UniqueKey.work_hour,-1)!=-1){
-            tv_work_hour.setText(amr.getInt(UniqueKey.work_hour,-1)+"小时");
-            mWorkHour = amr.getInt(UniqueKey.work_hour,-1);
+        if(amr.getInt(UniqueKeyAnn.WORK_HOUR,-1)!=-1){
+            tv_work_hour.setText(amr.getInt(UniqueKeyAnn.WORK_HOUR,-1)+"小时");
+            mWorkHour = amr.getInt(UniqueKeyAnn.WORK_HOUR,-1);
         }
-        if(!TextUtils.isEmpty(amr.getString(UniqueKey.clock_type))){
-            sType = amr.getString(UniqueKey.clock_type);
+        if(!TextUtils.isEmpty(amr.getString(UniqueKeyAnn.CLOCK_TYPE))){
+            sType = amr.getString(UniqueKeyAnn.CLOCK_TYPE);
             tv_clock_type.setText(sType);
         }
         String version = getVersion();
@@ -117,8 +120,8 @@ public class SettingActivity extends BaseActivity {
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 Log.d("测试", Integer.toString(hourOfDay));
                 Log.d("测试", Integer.toString(minute));
-                amr.putInt(UniqueKey.calarm_hour,hourOfDay);
-                amr.putInt(UniqueKey.calarm_minute,minute);
+                amr.putInt(UniqueKeyAnn.CALARM_HOUR,hourOfDay);
+                amr.putInt(UniqueKeyAnn.CALARM_MINUTE,minute);
                 String str = hourOfDay+":"+minute;
                 tv_work_time.setText(str);
             }
@@ -147,7 +150,7 @@ public class SettingActivity extends BaseActivity {
         contentview.findViewById(R.id.tv_sure).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                amr.putInt(UniqueKey.work_hour,mWorkHour);
+                amr.putInt(UniqueKeyAnn.WORK_HOUR,mWorkHour);
                 tv_work_hour.setText(mWorkHour+"小时");
                 popupWindow.dismiss();
             }
@@ -192,7 +195,7 @@ public class SettingActivity extends BaseActivity {
         contentview.findViewById(R.id.tv_sure).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                amr.putString(UniqueKey.clock_type,sType);
+                amr.putString(UniqueKeyAnn.CLOCK_TYPE,sType);
                 tv_clock_type.setText(sType);
                 popupWindow.dismiss();
             }

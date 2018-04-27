@@ -1,11 +1,11 @@
 package com.clock.zc.punchtheclock.util;
 
-import android.content.Context;
-import android.text.TextUtils;
-import android.view.View;
+        import android.content.Context;
+        import android.text.TextUtils;
+        import android.view.View;
 
-import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
-import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
+        import com.gitonway.lee.niftymodaldialogeffects.lib.Effectstype;
+        import com.gitonway.lee.niftymodaldialogeffects.lib.NiftyDialogBuilder;
 
 /**
  * Created by Zc on 2017/10/11.

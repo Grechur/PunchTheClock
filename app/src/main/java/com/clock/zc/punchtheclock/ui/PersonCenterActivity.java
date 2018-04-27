@@ -51,20 +51,10 @@ public class PersonCenterActivity extends BaseActivity {
                 onBackPressed();
                 break;
             case R.id.title:
-                effectsDialogUtil.createSingleDialog(context, Effectstype.Slit, "hahaha", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        effectsDialogUtil.cancleDialog();
-                    }
-                });
+
                 break;
             case R.id.rl_center:
-                effectsDialogUtil.createSingleDialog(context, Effectstype.Shake, "hahaha", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        effectsDialogUtil.cancleDialog();
-                    }
-                });
+
                 break;
         }
     }
